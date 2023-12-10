@@ -2,6 +2,7 @@ package com.yasination.mysqlite;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
@@ -20,6 +21,9 @@ public class MySqldata extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE = "CREATE TABLE "+TABLE_NAME+"( "+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+NAME+" VARCHAR(300), "+AGE+" INTEGER , "+GENDER+" VARCHAR(20)); ";
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS "+TABLE_NAME;
+    private static final String SELECT_ALL = "SELECT * FROM "+TABLE_NAME;
+
+
     private Context context;
     public MySqldata(@Nullable Context context) {
         super(context, DB_NAME, null, VERSION_CODE);
@@ -63,5 +67,11 @@ public class MySqldata extends SQLiteOpenHelper {
         contentValues.put(GENDER, gender);
         long rowID = sqLiteDatabase.insert(TABLE_NAME,null,contentValues);
         return rowID;
+    }
+
+    public Cursor loadAllData(){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery(SELECT_ALL,null);
+        return cursor;
     }
 }

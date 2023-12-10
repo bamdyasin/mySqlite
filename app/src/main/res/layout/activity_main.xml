@@ -72,6 +72,13 @@
         android:layout_gravity="center"
         android:text="Submit"
         />
+    <Button
+        android:id="@+id/btnLoad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Load"
+        />
 
 
 

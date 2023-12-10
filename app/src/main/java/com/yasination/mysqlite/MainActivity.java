@@ -1,7 +1,9 @@
 package com.yasination.mysqlite;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +13,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText EditTextName,EditTextAge,EditTextGender;
-    private Button btnSubmit;
+    private Button btnSubmit, btnLoad;
     MySqldata mySqldata;
 
     @Override
@@ -26,11 +28,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EditTextAge = findViewById(R.id.EditTextAge);
         EditTextGender = findViewById(R.id.EditTextGender);
         btnSubmit = findViewById(R.id.btnSubmit);
-
-
-
-
+        btnLoad = findViewById(R.id.btnLoad);
         btnSubmit.setOnClickListener(this);
+        btnLoad.setOnClickListener(this);
+
+
     }//====================onCreate End =========================
 
     @Override
@@ -51,35 +53,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
+        if (v.getId() == R.id.btnLoad){
+            Cursor result = mySqldata.loadAllData();
+            if (result.getCount()==0){
+                showData("Error","No data found");
+                return ;
+            }
+            StringBuffer stringBuffer = new StringBuffer();
+            while (result.moveToNext()){
+                stringBuffer.append("ID "+result.getString(0)+"\n");
+                stringBuffer.append("Name "+result.getString(1)+"\n");
+                stringBuffer.append("Age "+result.getString(2)+"\n");
+                stringBuffer.append("Gender "+result.getString(3)+"\n");
+            }
+            showData("Rasult : ", stringBuffer.toString());
+            Toast.makeText(getApplicationContext(), "Inserted Row ", Toast.LENGTH_SHORT).show();
+
+        }
+
+
+
+
+
+    }//=====================onClick===============
+
+    private void  showData(String title, String data){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(data);
+        builder.setCancelable(true);
+        builder.show();
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
