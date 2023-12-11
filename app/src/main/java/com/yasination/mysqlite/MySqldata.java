@@ -74,4 +74,24 @@ public class MySqldata extends SQLiteOpenHelper {
         Cursor cursor = sqLiteDatabase.rawQuery(SELECT_ALL,null);
         return cursor;
     }
+
+    public boolean UpdateData(String id, String name, String age, String gender){
+
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ID, id);
+        contentValues.put(NAME, name);
+        contentValues.put(AGE, age);
+        contentValues.put(GENDER, gender);
+        sqLiteDatabase.update(TABLE_NAME,contentValues,ID+" = ?", new String[]{id});
+        return true;
+    }
+    public Integer deleteData(String id){
+
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ID, id);
+
+        return sqLiteDatabase.delete(TABLE_NAME,ID+" = ?", new String[]{id});
+    }
 }

@@ -3,6 +3,7 @@ package com.yasination.mysqlite;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -12,8 +13,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private EditText EditTextName,EditTextAge,EditTextGender;
-    private Button btnSubmit, btnLoad;
+    private EditText EditTextName,EditTextAge,EditTextGender, EditTextId;
+    private Button btnSubmit, btnLoad, btnUpdate,btnDelete;
     MySqldata mySqldata;
 
     @Override
@@ -29,8 +30,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EditTextGender = findViewById(R.id.EditTextGender);
         btnSubmit = findViewById(R.id.btnSubmit);
         btnLoad = findViewById(R.id.btnLoad);
+        btnUpdate = findViewById(R.id.btnUpdate);
+        EditTextId = findViewById(R.id.EditTextId);
+        btnDelete = findViewById(R.id.btnDelete);
+
+
         btnSubmit.setOnClickListener(this);
         btnLoad.setOnClickListener(this);
+        btnUpdate.setOnClickListener(this);
+        btnDelete.setOnClickListener(this);
 
 
     }//====================onCreate End =========================
@@ -40,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String name = EditTextName.getText().toString();
         String age = EditTextAge.getText().toString();
         String gender = EditTextGender.getText().toString();
+        String id = EditTextId.getText().toString();
 
 
         if (v.getId() == R.id.btnSubmit){
@@ -64,10 +73,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 stringBuffer.append("ID "+result.getString(0)+"\n");
                 stringBuffer.append("Name "+result.getString(1)+"\n");
                 stringBuffer.append("Age "+result.getString(2)+"\n");
-                stringBuffer.append("Gender "+result.getString(3)+"\n");
+                stringBuffer.append("Gender "+result.getString(3)+"\n\n");
             }
             showData("Rasult : ", stringBuffer.toString());
-            Toast.makeText(getApplicationContext(), "Inserted Row ", Toast.LENGTH_SHORT).show();
+        }
+
+        if (v.getId() == R.id.btnUpdate){
+            boolean updatedData =  mySqldata.UpdateData(id,name,age,gender);
+            if (updatedData == true){
+                Toast.makeText(getApplicationContext(), "Successfully Updated", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(getApplicationContext(), "Not Updated", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if (v.getId() == R.id.btnDelete){
+            int valueDelete = mySqldata.deleteData(id);
+            if (valueDelete >0){
+                Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(getApplicationContext(), "Not Deleted", Toast.LENGTH_SHORT).show();
+            }
 
         }
 
@@ -85,5 +111,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.show();
 
     }
+
 
 }
